@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useFavorites } from "@/hooks/useFavorites";
+import { toast } from "react-toastify";
+import { formatPrice, formatShortAddress, getBedBathText, getPropertyTypeLabel } from "@/utils/formatters";
+import { isFavorite } from "@/utils/storage";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
-import { formatPrice, formatShortAddress, getBedBathText, getPropertyTypeLabel } from "@/utils/formatters";
-import { useFavorites } from "@/hooks/useFavorites";
-import { toast } from "react-toastify";
 
 const PropertyCard = ({ property }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
@@ -33,7 +34,7 @@ const PropertyCard = ({ property }) => {
     setImageError(true);
   };
 
-  const primaryImage = property.images && property.images.length > 0 ? property.images[0] : null;
+const primaryImage = property.images_c && property.images_c.length > 0 ? property.images_c[0] : null;
 
   return (
     <div className="bg-white rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden card-hover">
@@ -49,7 +50,7 @@ const PropertyCard = ({ property }) => {
           {primaryImage && !imageError ? (
             <img
               src={primaryImage}
-              alt={property.title}
+alt={property.Name}
               className={`w-full h-full object-cover transition-opacity duration-300 ${
                 imageLoading ? "opacity-0" : "opacity-100"
               }`}
@@ -62,14 +63,14 @@ const PropertyCard = ({ property }) => {
             </div>
           )}
 
-          {/* Property Status Badge */}
-          {property.status && (
+{/* Property Status Badge */}
+          {property.status_c && (
             <div className="absolute top-3 left-3">
               <Badge 
-                variant={property.status === "For Sale" ? "accent" : "primary"}
+                variant={property.status_c === "For Sale" ? "accent" : "primary"}
                 className="text-xs font-semibold"
               >
-                {property.status}
+                {property.status_c}
               </Badge>
             </div>
           )}
@@ -92,10 +93,10 @@ const PropertyCard = ({ property }) => {
           </button>
 
           {/* Image Count */}
-          {property.images && property.images.length > 1 && (
+{property.images_c && property.images_c.length > 1 && (
             <div className="absolute bottom-3 right-3 bg-black/60 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
               <ApperIcon name="Camera" className="w-3 h-3" />
-              {property.images.length}
+              {property.images_c.length}
             </div>
           )}
         </div>
@@ -104,8 +105,8 @@ const PropertyCard = ({ property }) => {
         <div className="p-6">
           {/* Price */}
           <div className="mb-2">
-            <span className="text-2xl font-bold text-gray-900 gradient-text">
-              {formatPrice(property.price)}
+<span className="text-2xl font-bold text-gray-900 gradient-text">
+              {formatPrice(property.price_c)}
             </span>
           </div>
 
@@ -117,7 +118,7 @@ const PropertyCard = ({ property }) => {
           {/* Property Type */}
           <div className="mb-3">
             <Badge variant="default" className="text-xs">
-              {getPropertyTypeLabel(property.propertyType)}
+{getPropertyTypeLabel(property.property_type_c)}
             </Badge>
           </div>
 
@@ -125,26 +126,27 @@ const PropertyCard = ({ property }) => {
           <div className="flex items-center justify-between mb-4 text-sm text-gray-600">
             <span className="flex items-center gap-1">
               <ApperIcon name="Bed" className="w-4 h-4" />
-              {getBedBathText(property.bedrooms, property.bathrooms)}
+{getBedBathText(property.bedrooms_c, property.bathrooms_c)}
             </span>
-            <span className="flex items-center gap-1">
+            <span className="text-sm text-gray-600 flex items-center gap-1">
               <ApperIcon name="Maximize" className="w-4 h-4" />
-              {property.sqft ? `${property.sqft.toLocaleString()} sqft` : "N/A"}
+              {property.sqft_c ? `${property.sqft_c.toLocaleString()} sqft` : "N/A"}
             </span>
           </div>
 
           {/* Additional Info */}
           <div className="space-y-1 text-sm text-gray-500">
-            {property.yearBuilt && (
+{property.year_built_c && (
               <div className="flex items-center gap-1">
                 <ApperIcon name="Calendar" className="w-4 h-4" />
-                Built in {property.yearBuilt}
+                Built in {property.year_built_c}
               </div>
             )}
-            {property.lotSize && (
+
+{property.lot_size_c && (
               <div className="flex items-center gap-1">
                 <ApperIcon name="Square" className="w-4 h-4" />
-                {property.lotSize.toLocaleString()} sqft lot
+                {property.lot_size_c.toLocaleString()} sqft lot
               </div>
             )}
           </div>

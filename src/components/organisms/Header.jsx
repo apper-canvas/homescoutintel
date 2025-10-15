@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import SearchBar from "@/components/molecules/SearchBar";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useAuth } from "@/layouts/Root";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { favoritesCount } = useFavorites();
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { logout } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -42,7 +46,7 @@ const Header = () => {
             <SearchBar onSearch={handleSearch} />
           </div>
 
-          {/* Desktop Navigation */}
+{/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
             <Link
               to="/"
@@ -62,6 +66,21 @@ const Header = () => {
                 </span>
               )}
             </Link>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-gray-600">
+                  {user?.firstName} {user?.lastName}
+                </span>
+                <Button variant="outline" size="sm" onClick={logout}>
+                  <ApperIcon name="LogOut" className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Button variant="primary" size="sm" asChild>
+                <Link to="/login">Sign In</Link>
+              </Button>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -85,7 +104,7 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-200">
+<div className="lg:hidden bg-white border-t border-gray-200">
           <div className="px-4 py-3 space-y-3">
             <Link
               to="/"
@@ -107,6 +126,31 @@ const Header = () => {
                 </span>
               )}
             </Link>
+            {isAuthenticated ? (
+              <>
+                <div className="py-2 text-sm text-gray-600">
+                  {user?.firstName} {user?.lastName}
+                </div>
+                <button
+                  onClick={() => {
+                    logout();
+                    closeMobileMenu();
+                  }}
+                  className="flex items-center text-gray-700 hover:text-primary-600 font-medium py-2 w-full"
+                >
+                  <ApperIcon name="LogOut" className="w-5 h-5 mr-2" />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                onClick={closeMobileMenu}
+                className="block text-gray-700 hover:text-primary-600 font-medium py-2"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       )}

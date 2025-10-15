@@ -1,54 +1,57 @@
 export const formatPrice = (price) => {
-  if (!price) return "$0";
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(price);
 };
 
-export const formatNumber = (num) => {
-  if (!num) return "0";
-  return new Intl.NumberFormat("en-US").format(num);
-};
-
-export const formatDate = (date) => {
-  if (!date) return "";
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
-
 export const formatAddress = (property) => {
-  if (!property) return "";
-  const { address, city, state, zipCode } = property;
-  return `${address}, ${city}, ${state} ${zipCode}`;
+  return `${property.address_c}, ${property.city_c}, ${property.state_c} ${property.zip_code_c}`;
 };
 
 export const formatShortAddress = (property) => {
-  if (!property) return "";
-  const { city, state } = property;
-  return `${city}, ${state}`;
-};
-
-export const getBedBathText = (bedrooms, bathrooms) => {
-  const bedText = bedrooms === 1 ? "1 bed" : `${bedrooms} beds`;
-  const bathText = bathrooms === 1 ? "1 bath" : `${bathrooms} baths`;
-  return `${bedText}, ${bathText}`;
+  return `${property.city_c}, ${property.state_c} ${property.zip_code_c}`;
 };
 
 export const getPropertyTypeLabel = (type) => {
-  const typeMap = {
-    "single-family": "Single Family",
-    "condo": "Condo",
-    "townhouse": "Townhouse",
-    "apartment": "Apartment",
-    "multi-family": "Multi-Family",
-    "land": "Land",
-    "commercial": "Commercial",
+  const labels = {
+    'single-family': 'Single Family',
+    'House': 'House',
+    'condo': 'Condo',
+    'Condo': 'Condo',
+    'townhouse': 'Townhouse',
+    'Townhouse': 'Townhouse',
+    'Apartment': 'Apartment',
+    'multi-family': 'Multi Family',
+    'land': 'Land',
+    'Land': 'Land',
+    'commercial': 'Commercial',
+    'Other': 'Other',
   };
-  return typeMap[type] || type;
+  return labels[type] || type;
+};
+
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    return 'Today';
+  } else if (diffDays === 1) {
+    return 'Yesterday';
+  } else if (diffDays < 7) {
+    return `${diffDays} days ago`;
+  } else if (diffDays < 30) {
+    return `${Math.floor(diffDays / 7)} weeks ago`;
+  } else {
+return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+};
+
+export const getBedBathText = (bedrooms, bathrooms) => {
+  return `${bedrooms} bed, ${bathrooms} bath`;
 };

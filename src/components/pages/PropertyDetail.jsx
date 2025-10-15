@@ -100,26 +100,26 @@ const PropertyDetail = () => {
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
-              {property.title}
+{property.Name}
             </h1>
-            <p className="text-lg text-gray-600 mb-3">
+            <p className="text-xl text-gray-600 mb-4 flex items-center">
               {formatAddress(property)}
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap gap-2">
               <Badge variant="primary">
-                {getPropertyTypeLabel(property.propertyType)}
+                {getPropertyTypeLabel(property.property_type_c)}
               </Badge>
-              <Badge variant={property.status === "For Sale" ? "accent" : "default"}>
-                {property.status}
+              <Badge variant={property.status_c === "For Sale" ? "accent" : "default"}>
+                {property.status_c}
               </Badge>
             </div>
           </div>
           
           <div className="text-right">
             <div className="text-3xl lg:text-4xl font-bold gradient-text mb-2">
-              {formatPrice(property.price)}
+{formatPrice(property.price_c)}
             </div>
-            <p className="text-gray-600">Listed {formatDate(property.listingDate)}</p>
+            <p className="text-gray-600">Listed {formatDate(property.listing_date_c)}</p>
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@ const PropertyDetail = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Gallery Column */}
         <div className="lg:col-span-2">
-          <PropertyGallery images={property.images} title={property.title} />
+<PropertyGallery images={property.images_c} title={property.Name} />
         </div>
 
         {/* Property Details Column */}
@@ -141,37 +141,37 @@ const PropertyDetail = () => {
                 <ApperIcon name="Bed" className="w-5 h-5 text-gray-400" />
                 <span className="text-sm text-gray-600">Bedrooms</span>
               </div>
-              <div className="text-right font-medium">{property.bedrooms}</div>
+<div className="text-right font-medium">{property.bedrooms_c}</div>
               
               <div className="flex items-center gap-2">
                 <ApperIcon name="Bath" className="w-5 h-5 text-gray-400" />
                 <span className="text-sm text-gray-600">Bathrooms</span>
               </div>
-              <div className="text-right font-medium">{property.bathrooms}</div>
+              <div className="text-right font-medium">{property.bathrooms_c}</div>
               
               <div className="flex items-center gap-2">
                 <ApperIcon name="Maximize" className="w-5 h-5 text-gray-400" />
                 <span className="text-sm text-gray-600">Square Feet</span>
               </div>
-              <div className="text-right font-medium">{property.sqft?.toLocaleString()}</div>
+              <div className="text-right font-medium">{property.sqft_c?.toLocaleString()}</div>
               
-              {property.lotSize && (
+              {property.lot_size_c && (
                 <>
                   <div className="flex items-center gap-2">
                     <ApperIcon name="Square" className="w-5 h-5 text-gray-400" />
                     <span className="text-sm text-gray-600">Lot Size</span>
                   </div>
-                  <div className="text-right font-medium">{property.lotSize.toLocaleString()} sqft</div>
+                  <div className="text-right font-medium">{property.lot_size_c.toLocaleString()} sqft</div>
                 </>
               )}
               
-              {property.yearBuilt && (
+              {property.year_built_c && (
                 <>
                   <div className="flex items-center gap-2">
                     <ApperIcon name="Calendar" className="w-5 h-5 text-gray-400" />
                     <span className="text-sm text-gray-600">Year Built</span>
                   </div>
-                  <div className="text-right font-medium">{property.yearBuilt}</div>
+                  <div className="text-right font-medium">{property.year_built_c}</div>
                 </>
               )}
             </div>
@@ -213,21 +213,21 @@ const PropertyDetail = () => {
       </div>
 
       {/* Description Section */}
-      {property.description && (
+{property.description_c && (
         <div className="mt-8 bg-white rounded-lg shadow-card p-6">
           <h3 className="text-lg font-semibold mb-4">Description</h3>
           <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-            {property.description}
+            {property.description_c}
           </p>
         </div>
       )}
 
       {/* Amenities Section */}
-      {property.amenities && property.amenities.length > 0 && (
+{property.amenities_c && property.amenities_c.length > 0 && (
         <div className="mt-8 bg-white rounded-lg shadow-card p-6">
           <h3 className="text-lg font-semibold mb-4">Amenities</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {property.amenities.map((amenity, index) => (
+            {property.amenities_c.map((amenity, index) => (
               <div key={index} className="flex items-center gap-2">
                 <ApperIcon name="Check" className="w-5 h-5 text-success" />
                 <span className="text-gray-700">{amenity}</span>

@@ -44,70 +44,70 @@ const SearchResults = () => {
     }
   };
 
-  const filteredAndSortedProperties = useMemo(() => {
+const filteredAndSortedProperties = useMemo(() => {
     let filtered = [...properties];
 
     // Apply search query first
     if (searchQuery) {
       const queryLower = searchQuery.toLowerCase();
       filtered = filtered.filter(property => 
-        property.city.toLowerCase().includes(queryLower) ||
-        property.state.toLowerCase().includes(queryLower) ||
-        property.zipCode.includes(searchQuery) ||
-        property.address.toLowerCase().includes(queryLower) ||
-        property.title.toLowerCase().includes(queryLower)
+        property.city_c?.toLowerCase().includes(queryLower) ||
+        property.state_c?.toLowerCase().includes(queryLower) ||
+        property.zip_code_c?.includes(searchQuery) ||
+        property.address_c?.toLowerCase().includes(queryLower) ||
+        property.Name?.toLowerCase().includes(queryLower)
       );
     }
 
     // Apply other filters
     if (filters.priceMin) {
-      filtered = filtered.filter(property => property.price >= parseInt(filters.priceMin));
+      filtered = filtered.filter(property => property.price_c >= parseInt(filters.priceMin));
     }
     if (filters.priceMax) {
-      filtered = filtered.filter(property => property.price <= parseInt(filters.priceMax));
+      filtered = filtered.filter(property => property.price_c <= parseInt(filters.priceMax));
     }
 
     if (filters.propertyType && filters.propertyType.length > 0) {
       filtered = filtered.filter(property => 
-        filters.propertyType.includes(property.propertyType)
+        filters.propertyType.includes(property.property_type_c)
       );
     }
 
     if (filters.bedrooms) {
       filtered = filtered.filter(property => 
-        property.bedrooms >= parseInt(filters.bedrooms)
+        property.bedrooms_c >= parseInt(filters.bedrooms)
       );
     }
 
     if (filters.bathrooms) {
       filtered = filtered.filter(property => 
-        property.bathrooms >= parseInt(filters.bathrooms)
+        property.bathrooms_c >= parseInt(filters.bathrooms)
       );
     }
 
     if (filters.sqftMin) {
       filtered = filtered.filter(property => 
-        property.sqft >= parseInt(filters.sqftMin)
+        property.sqft_c >= parseInt(filters.sqftMin)
       );
     }
 
     // Apply sorting
     switch (filters.sortBy) {
       case "price-low":
-        filtered.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => (a.price_c || 0) - (b.price_c || 0));
         break;
       case "price-high":
-        filtered.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => (b.price_c || 0) - (a.price_c || 0));
         break;
       case "sqft-high":
-        filtered.sort((a, b) => b.sqft - a.sqft);
+        filtered.sort((a, b) => (b.sqft_c || 0) - (a.sqft_c || 0));
         break;
       case "sqft-low":
-        filtered.sort((a, b) => a.sqft - b.sqft);
+        filtered.sort((a, b) => (a.sqft_c || 0) - (b.sqft_c || 0));
         break;
       case "newest":
       default:
-        filtered.sort((a, b) => new Date(b.listingDate) - new Date(a.listingDate));
+        filtered.sort((a, b) => new Date(b.listing_date_c || 0) - new Date(a.listing_date_c || 0));
         break;
     }
 
